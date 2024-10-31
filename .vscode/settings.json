@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:hexa-ddd-golang-gin}/data.db",
+            "name": "hexa-go"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

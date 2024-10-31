@@ -1,0 +1,23 @@
+# .air.toml
+root = "."
+tmp_dir = "tmp"
+
+build = "go build -o ./tmp/main ./cmd/main.go"
+run = "./tmp/main"
+
+ignore = [
+  ".git",
+  "tmp",
+  "vendor",
+  "node_modules",
+  "*.test.go",
+]
+
+watch_dir = [
+  "pkg",
+  "cmd",
+  "infrastructure",
+]
+
+[cached]
+enable = true

@@ -12,7 +12,7 @@ swag init -g cmd/main.go
 go run cmd/main.go
 ```
 
-# 3- hot reload
+# 3- hot reload https://github.com/air-verse/air
 
 go install github.com/cosmtrek/air@latest
 go install github.com/air-verse/air@latest

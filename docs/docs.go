@@ -41,7 +41,7 @@ const docTemplate = `{
                     {
                         "description": "LoginDto",
                         "name": "credentials",
-                        "in": "body",
+                        "in_adapters": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/dtos.LoginDto"
@@ -81,7 +81,7 @@ const docTemplate = `{
                     {
                         "description": "RegisterDto",
                         "name": "credentials",
-                        "in": "body",
+                        "in_adapters": "body",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/dtos.RegisterDto"
@@ -113,7 +113,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "ID del Usuario",
                         "name": "id",
-                        "in": "path",
+                        "in_adapters": "path",
                         "required": true
                     }
                 ],

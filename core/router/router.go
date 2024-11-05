@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	fscache "github.com/iqquee/fs-cache"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/yasniel1408/hexa-ddd-golang-gin/core/db"
@@ -11,8 +12,9 @@ import (
 	productIn "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/products/infrastructure/in"
 	productOut "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/products/infrastructure/out"
 	userApp "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/application"
-	userIn "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/infrastructure/in"
-	userOut "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/infrastructure/out"
+	"github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/infrastructure/in_adapters/http"
+	cache "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/infrastructure/out_adapters/cache"
+	userOut "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/infrastructure/out_adapters/sql"
 )
 
 func SetupRouter() *gin.Engine {
@@ -23,6 +25,10 @@ func SetupRouter() *gin.Engine {
 	// Inicializar la base de datos
 	database := db.InitDB()
 
+	// cache
+	var myfscache fscache.Operations = fscache.New()
+	mycache := cache.CacheUsersAdapter(&myfscache)
+
 	// Middleware de autenticación
 	authMiddleware := middlewares.AuthMiddleware(jwtKey)
 
@@ -31,13 +37,13 @@ func SetupRouter() *gin.Engine {
 	productRepo := productOut.ProductRepository(database)
 
 	// Servicios
-	authService := userApp.NewAuthService(userRepo, jwtKey)
-	userService := userApp.NewUserService(userRepo)
-	productService := productApp.NewProductService(productRepo)
+	authService := userApp.AuthService(userRepo, jwtKey)
+	userService := userApp.UserService(userRepo, mycache)
+	productService := productApp.ProductService(productRepo)
 
-	// Handlers
-	authController := userIn.AuthController(authService)
-	userController := userIn.UserController(userService)
+	// Controller
+	authController := http.AuthController(authService)
+	userController := http.UserController(userService)
 	productController := productIn.ProductController(productService)
 
 	// Rutas

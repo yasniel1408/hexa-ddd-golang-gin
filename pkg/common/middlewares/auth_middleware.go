@@ -13,7 +13,7 @@ func AuthMiddleware(jwtKey []byte) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header missing"})
+			c.JSON(http.StatusUnauthorized, gin.H{"errors": "Authorization header missing"})
 			c.Abort()
 			return
 		}
@@ -21,7 +21,7 @@ func AuthMiddleware(jwtKey []byte) gin.HandlerFunc {
 		// El token debe tener el formato "Bearer {token}"
 		parts := strings.Split(authHeader, " ")
 		if len(parts) != 2 || parts[0] != "Bearer" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid authorization header format"})
+			c.JSON(http.StatusUnauthorized, gin.H{"errors": "Invalid authorization header format"})
 			c.Abort()
 			return
 		}
@@ -38,7 +38,7 @@ func AuthMiddleware(jwtKey []byte) gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"errors": "Invalid or expired token"})
 			c.Abort()
 			return
 		}

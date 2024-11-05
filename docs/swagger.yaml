@@ -1,0 +1,123 @@
+basePath: /
+definitions:
+  dtos.LoginDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dtos.RegisterDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  entities.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: Soporte
+    url: http://www.swagger.io/support
+  description: API para la gestión de autenticación, usuarios y productos
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Hexagonal DDD Golang Gin API
+  version: "1.0"
+paths:
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Autentica a un usuario y devuelve un token JWT
+      parameters:
+      - description: LoginDto
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.LoginDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+      summary: Iniciar sesión
+      tags:
+      - Users
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: Registra un nuevo usuario
+      parameters:
+      - description: RegisterDto
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.RegisterDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register User
+      tags:
+      - Users
+  /api/users/{id}:
+    get:
+      description: Devuelve los datos de un usuario específico basado en el ID proporcionado
+      parameters:
+      - description: ID del Usuario
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Obtiene un usuario por su ID
+      tags:
+      - Users
+swagger: "2.0"

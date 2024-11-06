@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/login": {
+        "/api/identity/login": {
             "post": {
                 "description": "Autentica a un usuario y devuelve un token JWT",
                 "consumes": [
@@ -34,17 +34,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "Identity"
                 ],
                 "summary": "Iniciar sesión",
                 "parameters": [
                     {
                         "description": "LoginDto",
                         "name": "credentials",
-                        "in_adapters": "body",
+                        "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.LoginDto"
+                            "$ref": "#/definitions/dtos_http.LoginDto"
                         }
                     }
                 ],
@@ -64,7 +64,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/register": {
+        "/api/identity/register": {
             "post": {
                 "description": "Registra un nuevo usuario",
                 "consumes": [
@@ -74,17 +74,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Users"
+                    "Identity"
                 ],
                 "summary": "Register User",
                 "parameters": [
                     {
                         "description": "RegisterDto",
                         "name": "credentials",
-                        "in_adapters": "body",
+                        "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.RegisterDto"
+                            "$ref": "#/definitions/dtos_http.RegisterDto"
                         }
                     }
                 ],
@@ -101,11 +101,11 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/users/{id}": {
+        "/api/identity/users/{id}": {
             "get": {
                 "description": "Devuelve los datos de un usuario específico basado en el ID proporcionado",
                 "tags": [
-                    "Users"
+                    "Identity"
                 ],
                 "summary": "Obtiene un usuario por su ID",
                 "parameters": [
@@ -113,7 +113,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "ID del Usuario",
                         "name": "id",
-                        "in_adapters": "path",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -121,7 +121,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/entities.User"
+                            "$ref": "#/definitions/dtos_http.GetUserResponseDto"
                         }
                     },
                     "400": {
@@ -147,22 +147,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dtos.LoginDto": {
+        "dtos_http.GetUserResponseDto": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "password": {
-                    "type": "string"
-                }
-            }
-        },
-        "dtos.RegisterDto": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
+                "id": {
+                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -172,14 +164,22 @@ const docTemplate = `{
                 }
             }
         },
-        "entities.User": {
+        "dtos_http.LoginDto": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "id": {
-                    "type": "integer"
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "dtos_http.RegisterDto": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"

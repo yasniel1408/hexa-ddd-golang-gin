@@ -1,27 +1,27 @@
 basePath: /
 definitions:
-  dtos.LoginDto:
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-    type: object
-  dtos.RegisterDto:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      password:
-        type: string
-    type: object
-  entities.User:
+  dtos_http.GetUserResponseDto:
     properties:
       email:
         type: string
       id:
         type: integer
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  dtos_http.LoginDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dtos_http.RegisterDto:
+    properties:
+      email:
+        type: string
       name:
         type: string
       password:
@@ -41,7 +41,7 @@ info:
   title: Hexagonal DDD Golang Gin API
   version: "1.0"
 paths:
-  /api/login:
+  /api/identity/login:
     post:
       consumes:
       - application/json
@@ -52,7 +52,7 @@ paths:
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/dtos.LoginDto'
+          $ref: '#/definitions/dtos_http.LoginDto'
       produces:
       - application/json
       responses:
@@ -66,8 +66,8 @@ paths:
           description: Unauthorized
       summary: Iniciar sesión
       tags:
-      - Users
-  /api/register:
+      - Identity
+  /api/identity/register:
     post:
       consumes:
       - application/json
@@ -78,7 +78,7 @@ paths:
         name: credentials
         required: true
         schema:
-          $ref: '#/definitions/dtos.RegisterDto'
+          $ref: '#/definitions/dtos_http.RegisterDto'
       produces:
       - application/json
       responses:
@@ -90,8 +90,8 @@ paths:
             type: object
       summary: Register User
       tags:
-      - Users
-  /api/users/{id}:
+      - Identity
+  /api/identity/users/{id}:
     get:
       description: Devuelve los datos de un usuario específico basado en el ID proporcionado
       parameters:
@@ -104,7 +104,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/entities.User'
+            $ref: '#/definitions/dtos_http.GetUserResponseDto'
         "400":
           description: Bad Request
           schema:
@@ -119,5 +119,5 @@ paths:
             type: object
       summary: Obtiene un usuario por su ID
       tags:
-      - Users
+      - Identity
 swagger: "2.0"

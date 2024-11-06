@@ -1,10 +1,10 @@
 package db
 
 import (
+	"fmt"
+	"github.com/yasniel1408/hexa-ddd-golang-gin/pkg/identity/infrastructure/output_adapters/sql/dao"
 	"log"
 
-	productEntities "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/products/domain/entities"
-	userEntities "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/users/domain/entities"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -16,8 +16,10 @@ func InitDB() *gorm.DB {
 	}
 
 	// Migraciones automáticas
-	db.AutoMigrate(&userEntities.User{})
-	db.AutoMigrate(&productEntities.Product{})
+	errAutoMigrate := db.AutoMigrate(&dao.UserDao{})
+	if errAutoMigrate != nil {
+		fmt.Print(errAutoMigrate)
+	}
 
 	return db
 }

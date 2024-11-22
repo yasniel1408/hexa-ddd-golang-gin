@@ -9,6 +9,7 @@ import (
 	_ "github.com/yasniel1408/hexa-ddd-golang-gin/docs"
 	middlewares "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/common/middlewares"
 	userApp "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/identity/application"
+	"github.com/yasniel1408/hexa-ddd-golang-gin/pkg/identity/domain"
 	"github.com/yasniel1408/hexa-ddd-golang-gin/pkg/identity/infrastructure/input_adapters/http"
 	cache "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/identity/infrastructure/output_adapters/cache"
 	userOut "github.com/yasniel1408/hexa-ddd-golang-gin/pkg/identity/infrastructure/output_adapters/sql"
@@ -34,7 +35,8 @@ func SetupRouter() *gin.Engine {
 	userRepo := userOut.UserSqliteAdapter(database)
 
 	// Servicios
-	authService := userApp.AuthService(userRepo, jwtKey)
+	userFactory := domain.UserFactory{}
+	authService := userApp.AuthService(userRepo, jwtKey, userFactory)
 	userService := userApp.UserService(userRepo, mycache)
 
 	// Http
@@ -42,9 +44,8 @@ func SetupRouter() *gin.Engine {
 	userController := http.UserController(userService)
 
 	// Rutas
-	api := router.Group("/api")
+	api := router.Group("/api/identity")
 	{
-		api.Group("/identity")
 		api.POST("/register", authController.Register)
 		api.POST("/login", authController.Login)
 		api.GET("/users/:id", authMiddleware, userController.GetUser)
